@@ -5,7 +5,8 @@
   "proxy": "http://localhost:5001",
   "main": "index.js",
   "scripts": {
-    "start": "npx hexlet-chat-server -s ./frontend/build"
+    "start": "npx hexlet-chat-server -s ./frontend/build",
+    "build": "npm run build --prefix frontend"
   },
   "keywords": [
     "hexlet",
