@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npx hexlet-chat-server -s ./frontend/build",
-    "build": "npm run build --prefix frontend"
+    "build": "npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [
     "hexlet",
