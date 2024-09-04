@@ -1,0 +1,20 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "Hexlet Chat Project",
+  "proxy": "http://localhost:5001",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx hexlet-chat-server -s ./frontend/build"
+  },
+  "keywords": [
+    "hexlet",
+    "chat",
+    "project"
+  ],
+  "author": "Ivan Alekseenko",
+  "license": "ISC",
+  "dependencies": {
+    "@hexlet/chat-server": "^2.0.4"
+  }
+}
