@@ -37,10 +37,14 @@
     ]
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@eslint/js": "^9.11.1",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.0",
     "globals": "^15.9.0"
+=======
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+>>>>>>> bc9b4302cc0ef6173a0172e9fe0d176c4f4d9260
   }
 }
