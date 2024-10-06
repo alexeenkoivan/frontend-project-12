@@ -1,44 +1,63 @@
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import { Button, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import routes from '../routes.js';
 
 const LoginPage = () => {
-  const validationSchema = Yup.object({
-    username: Yup.string().required('Username is required'),
-    password: Yup.string().required('Password is required'),
+  const [authFailed, setAuthFailed] = useState(false);
+  const navigate = useNavigate();
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    onSubmit: async (values) => {
+      setAuthFailed(false);
+      try {
+        const response = await axios.post(routes.loginPath(), values);
+        localStorage.setItem('token', response.data.token);
+        navigate('/');
+      } catch (error) {
+        setAuthFailed(true);
+      }
+    },
   });
 
-  const initialValues = {
-    username: '',
-    password: '',
-  };
-
   return (
-    <div>
-      <h1>Login</h1>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-      >
-        <Form>
-          <div>
-            <label htmlFor="username">Username</label>
-            <Field name="username" type="text" />
-            <ErrorMessage name="username" component="div" />
-          </div>
+    <div className="row justify-content-center">
+      <div className="col-12 col-md-4">
+        <Form onSubmit={formik.handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="username">Username</Form.Label>
+            <Form.Control
+              id="username"
+              name="username"
+              type="text"
+              isInvalid={authFailed}
+              onChange={formik.handleChange}
+              value={formik.values.username}
+            />
+          </Form.Group>
 
-          <div>
-            <label htmlFor="password">Password</label>
-            <Field name="password" type="password" />
-            <ErrorMessage name="password" component="div" />
-          </div>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="password">Password</Form.Label>
+            <Form.Control
+              id="password"
+              name="password"
+              type="password"
+              isInvalid={authFailed}
+              onChange={formik.handleChange}
+              value={formik.values.password}
+            />
+            {authFailed && <Form.Control.Feedback type="invalid">the username or password is incorrect</Form.Control.Feedback>}
+          </Form.Group>
 
-          <button type="submit">Login</button>
+          <Button type="submit" variant="outline-primary">Submit</Button>
         </Form>
-      </Formik>
+      </div>
     </div>
   );
 };

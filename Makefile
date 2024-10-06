@@ -5,4 +5,7 @@ start:
 	npx start-server -s ./frontend/build
 
 lint:
-	npx eslint
+	npm run lint --prefix /home/Front/frontend-project-12/frontend
+
+frontend-lint:
+	make -f ../Makefile lint
