@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import HomePage from './HomePage';
-import LoginPage from './LoginPage';
-import NotFoundPage from './NotFoundPage';
+import HomePage from './components/HomePage';
+import LoginPage from './components/LoginPage';
+import NotFoundPage from './components/NotFoundPage';
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
