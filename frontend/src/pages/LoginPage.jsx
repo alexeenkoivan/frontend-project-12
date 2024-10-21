@@ -31,7 +31,7 @@ const LoginPage = () => {
       <div className="col-12 col-md-4">
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="username">Username</Form.Label>
+            <Form.Label htmlFor="username">Ваш ник</Form.Label>
             <Form.Control
               id="username"
               name="username"
@@ -43,7 +43,7 @@ const LoginPage = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="password">Password</Form.Label>
+            <Form.Label htmlFor="password">Пароль</Form.Label>
             <Form.Control
               id="password"
               name="password"
@@ -52,10 +52,14 @@ const LoginPage = () => {
               onChange={formik.handleChange}
               value={formik.values.password}
             />
-            {authFailed && <Form.Control.Feedback type="invalid">the username or password is incorrect</Form.Control.Feedback>}
+            {authFailed && (
+              <Form.Control.Feedback type="invalid">
+                Имя пользователя или пароль введены неверно
+              </Form.Control.Feedback>
+            )}
           </Form.Group>
 
-          <Button type="submit" variant="outline-primary">Submit</Button>
+          <Button type="submit" variant="outline-primary">Войти</Button>
         </Form>
       </div>
     </div>
