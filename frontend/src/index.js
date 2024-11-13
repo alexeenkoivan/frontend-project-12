@@ -1,27 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import channelsReducer from './slices/channelsSlice.js';
-import messagesReducer from './slices/messageSlice.js';
+import store from './store.js';
+import { io } from 'socket.io-client';
+import { addMessage } from './slices/messageSlice.js';
 
+const socket = io();
 
-const store = configureStore({
-  reducer: {
-    channels: channelsReducer,
-    messages: messagesReducer,
-  },
+// Прослушивание событий нового сообщения
+socket.on('newMessage', (message) => {
+  store.dispatch(addMessage(message));
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* Оборачиваем приложение в Provider для передачи store */}
     <Provider store={store}>
-      <App />
+      <App socket={socket} />
     </Provider>
   </React.StrictMode>
 );

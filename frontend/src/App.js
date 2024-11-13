@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
+import { SocketProvider } from './contexts/SocketContext.js';
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -16,17 +17,19 @@ PrivateRoute.propTypes = {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={
-          <PrivateRoute>
-            <HomePage /> {/* Страница чата */}
-          </PrivateRoute>
-        } />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Router>
+    <SocketProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={
+            <PrivateRoute>
+              <HomePage />
+            </PrivateRoute>
+          } />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
+    </SocketProvider>
   );
 }
 

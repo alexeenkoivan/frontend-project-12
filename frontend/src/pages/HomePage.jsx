@@ -1,41 +1,89 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchChannels } from '../slices/channelsSlice.js';
+import { fetchChannels, setActiveChannel } from '../slices/channelsSlice.js';
+import { useSocket } from '../contexts/SocketContext.js';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-
+  const socket = useSocket();
   const channels = useSelector((state) => state.channels.channels);
-  const loading = useSelector((state) => state.channels.loading);
-  const error = useSelector((state) => state.channels.error);
+  const activeChannelId = useSelector((state) => state.channels.activeChannelId);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchChannels());
-  }, [dispatch]);
+    if (socket) {
+      console.log('Setting up socket listeners'); // Настройка слушателей сокета
+      
+      dispatch(fetchChannels()); // Запрос каналов при подключении
+  
+      // Получение новых сообщений от сервера
+      socket.on('newMessage', (message) => {
+        console.log('Received message from server:', message);
+        setMessages((prev) => [...prev, message]);
+      });
+  
+      return () => {
+        console.log('Cleaning up socket listeners');
+        socket.off('newMessage');
+      };
+    }
+  }, [dispatch, socket]);
+  
 
-  // Логи для отладки: Проверяем, что содержится в переменных
-  console.log('Channels:', channels);
-  console.log('Loading:', loading);
-  console.log('Error:', error);
+  const handleNewMessage = (message) => {
+    if (socket) {
+      console.log('Sending message:', message);
+      socket.emit('newMessage', message, (response) => {
+        console.log('Server response:', response); // Лог ответа от сервера для отладки
+      });
+    }
+  };
 
-  if (loading) {
-    return <div>Loading channels...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handleChannelClick = (channelId) => {
+    dispatch(setActiveChannel(channelId));
+  };
 
   return (
-    <div>
-      <h1>Welcome to the Chat</h1>
-      <p>Please select a channel:</p>
-      <ul>
-        {/* Проверка, что channels является массивом перед вызовом map */}
-        {Array.isArray(channels) && channels.map((channel) => (
-          <li key={channel.id}>{channel.name}</li>
-        ))}
-      </ul>
+    <div style={{ display: 'flex' }}>
+      <div style={{ width: '30%' }}>
+        <h2>Channels</h2>
+        <ul>
+          {channels?.map((channel) => (
+            <li
+              key={channel.id}
+              style={{ fontWeight: channel.id === activeChannelId ? 'bold' : 'normal' }}
+              onClick={() => handleChannelClick(channel.id)}
+            >
+              {channel.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div style={{ width: '70%', paddingLeft: '20px' }}>
+        <h2>Messages</h2>
+        <ul style={{ height: '300px', overflowY: 'scroll', border: '1px solid #ddd', padding: '10px' }}>
+          {messages
+            .filter((msg) => msg.channelId === activeChannelId)
+            .map((msg, index) => (
+              <li key={index}>
+                <strong>{msg.username}:</strong> {msg.text}
+              </li>
+          ))}
+        </ul>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          const message = {
+            text: e.target.message.value,
+            channelId: activeChannelId,
+          };
+          handleNewMessage(message);
+          e.target.reset();
+        }}>
+          <input name="message" type="text" placeholder="Enter your message" />
+          <button type="submit">Send</button>
+        </form>
+      </div>
     </div>
   );
 };

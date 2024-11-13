@@ -4,7 +4,7 @@ import routes from '../routes.js';
 
 export const fetchChannels = createAsyncThunk(
   'channels/fetchChannels',
-  async (_, { getState }) => {
+  async () => {
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('Token is missing');
@@ -20,10 +20,15 @@ const channelsSlice = createSlice({
   name: 'channels',
   initialState: {
     channels: [],
+    activeChannelId: null,
     status: 'idle',
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setActiveChannel(state, action) {
+      state.activeChannelId = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchChannels.pending, (state) => {
@@ -31,7 +36,10 @@ const channelsSlice = createSlice({
       })
       .addCase(fetchChannels.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.channels = action.payload.channels;
+        state.channels = action.payload || [];
+
+        const generalChannel = state.channels.find((channel) => channel.name === 'general');
+        state.activeChannelId = generalChannel ? generalChannel.id : state.channels[0]?.id;
       })
       .addCase(fetchChannels.rejected, (state, action) => {
         state.status = 'failed';
@@ -40,4 +48,5 @@ const channelsSlice = createSlice({
   },
 });
 
+export const { setActiveChannel } = channelsSlice.actions;
 export default channelsSlice.reducer;
