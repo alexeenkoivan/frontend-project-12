@@ -13,12 +13,10 @@ export const SocketProvider = ({ children }) => {
     });
     setSocket(newSocket);
 
-    // Логируем успешное подключение
     newSocket.on('connect', () => {
       console.log('Connected to socket server');
     });
 
-    // Логируем ошибки подключения
     newSocket.on('connect_error', (err) => {
       console.error('Connection error:', err);
     });
