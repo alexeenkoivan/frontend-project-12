@@ -21,6 +21,10 @@ export const SocketProvider = ({ children }) => {
       console.error('Connection error:', err);
     });
 
+    newSocket.on('newChannel', (channel) => {
+      console.log('New channel received:', channel);
+    });
+
     return () => {
       newSocket.disconnect();
     };

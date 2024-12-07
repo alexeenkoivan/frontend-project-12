@@ -6,14 +6,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './store.js';
 import { io } from 'socket.io-client';
-import { addMessage } from './slices/messageSlice.js';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const socket = io();
-
-// Прослушивание событий нового сообщения
-socket.on('newMessage', (message) => {
-  store.dispatch(addMessage(message));
-});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

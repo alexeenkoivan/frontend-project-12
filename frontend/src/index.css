@@ -7,7 +7,34 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html, body {
+  height: 100%;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  height: 100%;
+}
+
+.row {
+  height: 100%;
+}
+
+.channels-section {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.messages-section {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.message-input-section {
+  height: 80px;
 }
