@@ -1,10 +1,7 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'LatoRegular', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f8f9fa;
 }
 
 html, body {
@@ -17,24 +14,87 @@ html, body {
   flex-direction: column;
 }
 
-.container {
-  height: 100%;
+h1 {
+  font-family: 'LatoBold', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
 }
 
-.row {
-  height: 100%;
+.btn-custom {
+  background-color: #fff;
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
+  font-size: 1rem;
+  padding: 0.5rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-.channels-section {
-  flex: 1;
-  overflow-y: auto;
+.btn-custom:hover {
+  background-color: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
 }
 
-.messages-section {
-  flex: 1;
-  overflow-y: auto;
+img {
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.message-input-section {
-  height: 80px;
+a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+}
+
+.form-floating label {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.navbar {
+  padding: 1rem 1.5rem;
+}
+
+.navbar-brand {
+  font-family: 'LatoBold', sans-serif;
+  font-size: 1.5rem;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  text-decoration: none;
+  color: #0b5ed7;
+}
+
+.invalid-tooltip {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.form-floating .form-control.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+img {
+  margin-bottom: 1rem;
 }

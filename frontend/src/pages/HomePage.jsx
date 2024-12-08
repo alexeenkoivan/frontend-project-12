@@ -9,9 +9,11 @@ import routes from '../routes.js';
 import AddChannelModal from '../modals/AddChannelModal.jsx';
 import RemoveChannelModal from '../modals/RemoveChannelModal.jsx';
 import RenameChannelModal from '../modals/RenameChannelModal.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const socket = useSocket();
   const channels = useSelector((state) => state.channels.channels);
   const activeChannelId = useSelector((state) => state.channels.activeChannelId);
@@ -20,6 +22,8 @@ const HomePage = () => {
   const [isAddChannelModalOpen, setAddChannelModalOpen] = useState(false);
   const [channelToRemove, setChannelToRemove] = useState(null);
   const [channelToRename, setChannelToRename] = useState(null);
+
+  const username = localStorage.getItem('username'); // Получение имени пользователя из localStorage
 
   const messages = messagesByChannelId[activeChannelId] || [];
 
@@ -43,6 +47,12 @@ const HomePage = () => {
     }
   }, [dispatch, activeChannelId, messagesByChannelId]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username'); // Удаление имени пользователя при выходе
+    navigate('/login');
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const trimmedMessage = newMessage.trim();
@@ -59,7 +69,7 @@ const HomePage = () => {
     const messageData = {
       body: trimmedMessage,
       channelId: activeChannelId,
-      username: 'admin',
+      username, // Используем имя пользователя из localStorage
     };
 
     try {
@@ -90,7 +100,9 @@ const HomePage = () => {
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
           <a className="navbar-brand" href="/">Hexlet Chat</a>
-          <button type="button" className="btn btn-primary">Выйти</button>
+          <button type="button" className="btn btn-primary" onClick={handleLogout}>
+            Выйти
+          </button>
         </div>
       </nav>
       <div className="container h-100 my-4 overflow-hidden rounded shadow">
