@@ -4,9 +4,11 @@ import { Modal, Button, FormControl, FormGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { renameChannel } from '../slices/channelsSlice.js';
 
 const RenameChannelModal = ({ channel, onHide }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channels.channels);
   const inputRef = useRef();
@@ -35,7 +37,7 @@ const RenameChannelModal = ({ channel, onHide }) => {
   return (
     <Modal show onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('modals.rename')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
@@ -43,7 +45,7 @@ const RenameChannelModal = ({ channel, onHide }) => {
             <FormControl
               ref={inputRef}
               name="name"
-              placeholder="Введите новое имя канала"
+              placeholder={t('modals.editChannelName')}
               value={formik.values.name}
               onChange={formik.handleChange}
               isInvalid={formik.touched.name && !!formik.errors.name}
@@ -52,10 +54,10 @@ const RenameChannelModal = ({ channel, onHide }) => {
           </FormGroup>
           <div className="d-flex justify-content-end mt-3">
             <Button variant="secondary" onClick={onHide} className="me-2">
-              Отменить
+              {t('modals.cancel')}
             </Button>
             <Button type="submit" variant="primary">
-              Отправить
+              {t('modals.submit')}
             </Button>
           </div>
         </form>

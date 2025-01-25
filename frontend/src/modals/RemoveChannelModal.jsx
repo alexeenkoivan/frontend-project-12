@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { removeChannel } from '../slices/channelsSlice.js';
 
 const RemoveChannelModal = ({ channel, onHide }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const handleRemove = () => {
@@ -15,19 +17,19 @@ const RemoveChannelModal = ({ channel, onHide }) => {
   return (
     <Modal show onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('modals.remove')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Вы уверены, что хотите удалить канал «{channel.name}»?</p>
+        <p className="lead">{t('modals.confirmation')}</p>
+        <div className="d-flex justify-content-end">
+          <Button type="button" className="me-2 btn btn-secondary" onClick={onHide}>
+            {t('modals.cancel')}
+          </Button>
+          <Button type="button" className="btn btn-danger" onClick={handleRemove}>
+            {t('modals.confirm')}
+          </Button>
+        </div>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Отменить
-        </Button>
-        <Button variant="danger" onClick={handleRemove}>
-          Удалить
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

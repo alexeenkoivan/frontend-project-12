@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as Yup from 'yup';
@@ -8,6 +9,7 @@ import routes from '../routes.js';
 import avatarRegistration from '../images/avatarRegistration.jpg';
 
 const SignupPage = () => {
+  const { t } = useTranslation();
   const [signupFailed, setSignupFailed] = useState(false);
   const navigate = useNavigate();
 
@@ -68,33 +70,34 @@ const SignupPage = () => {
                   />
                 </div>
                 <form className="w-50" onSubmit={formik.handleSubmit}>
-                  <h1 className="text-center mb-4">Регистрация</h1>
+                  <h1 className="text-center mb-4">{t('signup.header')}</h1>
                   <Form.Group className="form-floating mb-3">
                     <Form.Control
                       id="username"
                       name="username"
                       type="text"
-                      placeholder="Имя пользователя"
+                      placeholder={t('signup.username')}
                       isInvalid={signupFailed || (formik.touched.username && !!formik.errors.username)}
                       onChange={formik.handleChange}
                       value={formik.values.username}
                     />
-                    <Form.Label htmlFor="username">Имя пользователя</Form.Label>
-                    <div placement="right" className="invalid-tooltip">
-                      {formik.errors.username || (signupFailed && 'Такой пользователь уже существует')}
+                    <Form.Label htmlFor="username">{t('signup.username')}</Form.Label>
+                    <div className="invalid-tooltip">
+                      {formik.errors.username || (signupFailed && t('signup.alreadyExists'))}
                     </div>
+
                   </Form.Group>
                   <Form.Group className="form-floating mb-3">
                     <Form.Control
                       id="password"
                       name="password"
                       type="password"
-                      placeholder="Пароль"
+                      placeholder={t('signup.password')}
                       isInvalid={formik.touched.password && !!formik.errors.password}
                       onChange={formik.handleChange}
                       value={formik.values.password}
                     />
-                    <Form.Label htmlFor="password">Пароль</Form.Label>
+                    <Form.Label htmlFor="password">{t('signup.password')}</Form.Label>
                     <div className="invalid-tooltip">{formik.errors.password}</div>
                   </Form.Group>
                   <Form.Group className="form-floating mb-4">
@@ -102,16 +105,16 @@ const SignupPage = () => {
                       id="confirmPassword"
                       name="confirmPassword"
                       type="password"
-                      placeholder="Подтверждение пароля"
+                      placeholder={t('signup.confirm')}
                       isInvalid={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
                       onChange={formik.handleChange}
                       value={formik.values.confirmPassword}
                     />
-                    <Form.Label htmlFor="confirmPassword">Подтверждение пароля</Form.Label>
+                    <Form.Label htmlFor="confirmPassword">{t('signup.confirm')}</Form.Label>
                     <div className="invalid-tooltip">{formik.errors.confirmPassword}</div>
                   </Form.Group>
                   <button type="submit" className="btn btn-outline-primary w-100">
-                    Зарегистрироваться
+                    {t('signup.submit')}
                   </button>
                 </form>
               </div>

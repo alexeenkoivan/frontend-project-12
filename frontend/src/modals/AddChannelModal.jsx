@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { Modal, Button, FormControl, FormGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -7,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addChannel } from '../slices/channelsSlice.js';
 
 const AddChannelModal = ({ show, onHide }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channels.channels);
 
@@ -39,7 +41,7 @@ const AddChannelModal = ({ show, onHide }) => {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modals.add')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
@@ -47,7 +49,7 @@ const AddChannelModal = ({ show, onHide }) => {
             <FormControl
               ref={inputRef}
               name="name"
-              placeholder="Введите имя канала"
+              placeholder={t('modals.channelName')}
               value={formik.values.name}
               onChange={formik.handleChange}
               isInvalid={formik.touched.name && !!formik.errors.name}
@@ -56,10 +58,10 @@ const AddChannelModal = ({ show, onHide }) => {
           </FormGroup>
           <div className="d-flex justify-content-end mt-3">
             <Button variant="secondary" onClick={onHide} className="me-2">
-              Отменить
+              {t('modals.cancel')}
             </Button>
             <Button type="submit" variant="primary">
-              Отправить
+              {t('modals.submit')}
             </Button>
           </div>
         </form>

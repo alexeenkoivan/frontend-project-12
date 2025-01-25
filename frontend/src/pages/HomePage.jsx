@@ -9,9 +9,11 @@ import routes from '../routes.js';
 import AddChannelModal from '../modals/AddChannelModal.jsx';
 import RemoveChannelModal from '../modals/RemoveChannelModal.jsx';
 import RenameChannelModal from '../modals/RenameChannelModal.jsx';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const socket = useSocket();
@@ -23,7 +25,7 @@ const HomePage = () => {
   const [channelToRemove, setChannelToRemove] = useState(null);
   const [channelToRename, setChannelToRename] = useState(null);
 
-  const username = localStorage.getItem('username'); // Получение имени пользователя из localStorage
+  const username = localStorage.getItem('username');
 
   const messages = messagesByChannelId[activeChannelId] || [];
 
@@ -49,7 +51,7 @@ const HomePage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('username'); // Удаление имени пользователя при выходе
+    localStorage.removeItem('username');
     navigate('/login');
   };
 
@@ -69,7 +71,7 @@ const HomePage = () => {
     const messageData = {
       body: trimmedMessage,
       channelId: activeChannelId,
-      username, // Используем имя пользователя из localStorage
+      username,
     };
 
     try {
@@ -101,7 +103,7 @@ const HomePage = () => {
         <div className="container">
           <a className="navbar-brand" href="/">Hexlet Chat</a>
           <button type="button" className="btn btn-primary" onClick={handleLogout}>
-            Выйти
+            {t('logout')}
           </button>
         </div>
       </nav>
@@ -109,7 +111,7 @@ const HomePage = () => {
         <div className="row h-100 bg-white flex-md-row">
           <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-              <b>Каналы</b>
+              <b>{t('channels.channels')}</b>
               <button
                 type="button"
                 className="p-0 text-primary btn btn-group-vertical"
@@ -154,7 +156,9 @@ const HomePage = () => {
                 <p className="m-0">
                   <b># {channels.find((c) => c.id === activeChannelId)?.name}</b>
                 </p>
-                <span className="text-muted">{messages.length} сообщений</span>
+                <span className="text-muted">
+                  {t('messages.messagesCounter.messagesCount', { count: messages.length })}
+                </span>
               </div>
               <div id="messages-box" className="chat-messages overflow-auto px-5">
                 <ul className="list-unstyled">
@@ -170,8 +174,8 @@ const HomePage = () => {
                   <div className="input-group has-validation">
                     <input
                       name="body"
-                      aria-label="Новое сообщение"
-                      placeholder="Введите сообщение..."
+                      aria-label={t('messages.newMessage')}
+                      placeholder={t('messages.placeholder')}
                       className="border-0 p-0 ps-2 form-control"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}

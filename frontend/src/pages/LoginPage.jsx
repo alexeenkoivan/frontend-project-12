@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import routes from '../routes.js';
 import avatarLoginPage from '../images/avatarLoginPage.jpg';
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
   const navigate = useNavigate();
 
@@ -20,7 +22,7 @@ const LoginPage = () => {
       try {
         const response = await axios.post(routes.loginPath(), values);
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('username', values.username); // Сохранение имени пользователя
+        localStorage.setItem('username', values.username);
         navigate('/');
       } catch (error) {
         setAuthFailed(true);
@@ -49,44 +51,44 @@ const LoginPage = () => {
                   />
                 </div>
                 <form className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={formik.handleSubmit}>
-                  <h1 className="text-center mb-4">Войти</h1>
+                  <h1 className="text-center mb-4">{t('login.header')}</h1>
                   <Form.Group className="form-floating mb-3">
                     <Form.Control
                       id="username"
                       name="username"
                       type="text"
-                      placeholder="Ваш ник"
+                      placeholder={t('login.username')}
                       isInvalid={authFailed}
                       onChange={formik.handleChange}
                       value={formik.values.username}
                     />
-                    <Form.Label htmlFor="username">Ваш ник</Form.Label>
+                    <Form.Label htmlFor="username">{t('login.username')}</Form.Label>
                   </Form.Group>
                   <Form.Group className="form-floating mb-4">
                     <Form.Control
                       id="password"
                       name="password"
                       type="password"
-                      placeholder="Пароль"
+                      placeholder={t('login.password')}
                       isInvalid={authFailed}
                       onChange={formik.handleChange}
                       value={formik.values.password}
                     />
-                    <Form.Label htmlFor="password">Пароль</Form.Label>
+                    <Form.Label htmlFor="password">{t('login.password')}</Form.Label>
                     {authFailed && (
                       <Form.Control.Feedback type="invalid">
-                        Неправильные имя пользователя или пароль
+                        {t('login.authFailed')}
                       </Form.Control.Feedback>
                     )}
                   </Form.Group>
                   <button type="submit" className="btn-custom w-100 mb-3">
-                    Войти
+                    {t('login.submit')}
                   </button>
                 </form>
               </div>
               <div className="card-footer p-4">
                 <div className="text-center">
-                  <span>Нет аккаунта?</span> <a href="/signup">Регистрация</a>
+                  <span>{t('login.newToChat')}</span> <a href="/signup">{t('login.signup')}</a>
                 </div>
               </div>
             </div>
