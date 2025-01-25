@@ -1,4 +1,4 @@
-export default {
+const translations = {
   translation: {
     channels: {
       menu: 'Управление каналом',
@@ -10,12 +10,12 @@ export default {
       removed: 'Канал удалён',
     },
     messages: {
-			messagesCounter: {
-				messagesCount_zero: '{{count}} сообщений',
-				messagesCount_one: '{{count}} сообщение',
-				messagesCount_few: '{{count}} сообщения',
-				messagesCount_many: '{{count}} сообщений',
-			},
+      messagesCounter: {
+        messagesCount_zero: '{{count}} сообщений',
+        messagesCount_one: '{{count}} сообщение',
+        messagesCount_few: '{{count}} сообщения',
+        messagesCount_many: '{{count}} сообщений',
+      },
       newMessage: 'Введите сообщение...',
       placeholder: 'Новое сообщение',
       sendMessage: 'Отправить',
@@ -93,3 +93,5 @@ export default {
     darkMode: 'Темный режим',
   },
 };
+
+export default translations;
