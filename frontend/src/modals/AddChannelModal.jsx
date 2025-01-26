@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { addChannel } from '../slices/channelsSlice.js';
+import { toast } from 'react-toastify';
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation();
@@ -18,15 +19,20 @@ const AddChannelModal = ({ show, onHide }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .min(3, 'Имя канала должно содержать от 3 до 20 символов')
-        .max(20, 'Имя канала должно содержать от 3 до 20 символов')
-        .notOneOf(channels.map((channel) => channel.name), 'Имя канала должно быть уникальным')
-        .required('Обязательное поле'),
+        .min(3, t('modals.min'))
+        .max(20, t('modals.max'))
+        .notOneOf(channels.map((channel) => channel.name), t('modals.uniq'))
+        .required(t('modals.required')),
     }),
-    onSubmit: (values, { resetForm }) => {
-      dispatch(addChannel({ name: values.name }));
-      resetForm();
-      onHide();
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await dispatch(addChannel({ name: values.name })).unwrap();
+        toast.success(t('channels.created'));
+        resetForm();
+        onHide();
+      } catch (err) {
+        toast.error(t('errors.toastifyAdd'));
+      }
     },
   });
 

@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { io } from 'socket.io-client';
+import i18next from 'i18next';
+import { toast } from 'react-toastify';
 
 const SocketContext = createContext();
 
@@ -17,8 +19,8 @@ export const SocketProvider = ({ children }) => {
       console.log('Connected to socket server');
     });
 
-    newSocket.on('connect_error', (err) => {
-      console.error('Connection error:', err);
+    newSocket.on('connect_error', () => {
+      toast.error(i18next.t('errors.network'));
     });
 
     newSocket.on('newChannel', (channel) => {

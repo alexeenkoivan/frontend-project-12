@@ -1,16 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../routes.js';
+import i18next from 'i18next';
+import { toast } from 'react-toastify';
 
-export const fetchMessages = createAsyncThunk('messages/fetchMessages', async (channelId) => {
+export const fetchMessages = createAsyncThunk('messages/fetchMessages', async (channelId, { rejectWithValue }) => {
   const token = localStorage.getItem('token');
-  if (!token) {
-    throw new Error('Token is missing');
+  try {
+    const response = await axios.get(routes.channelMessagesPath(channelId), {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return { channelId, messages: response.data || [] };
+  } catch (error) {
+    if (!error.response || error.response.status >= 500) {
+      toast.error(i18next.t('errors.network'));
+    }
+    return rejectWithValue(error.message);
   }
-  const response = await axios.get(routes.channelMessagesPath(channelId), {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return { channelId, messages: response.data };
 });
 
 const messagesSlice = createSlice({

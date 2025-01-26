@@ -141,8 +141,8 @@ const HomePage = () => {
                         variant="light"
                         split
                       >
-                        <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>Удалить</Dropdown.Item>
-                        <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>Переименовать</Dropdown.Item>
+                        <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>{t('channels.remove')}</Dropdown.Item>
+                        <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>{t('channels.rename')}</Dropdown.Item>
                       </DropdownButton>
                     </Dropdown>
                   )}
