@@ -11,6 +11,8 @@ import RemoveChannelModal from '../modals/RemoveChannelModal.jsx';
 import RenameChannelModal from '../modals/RenameChannelModal.jsx';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import leoProfanity from 'leo-profanity';
+
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -57,23 +59,26 @@ const HomePage = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+  
     const trimmedMessage = newMessage.trim();
     if (!trimmedMessage) {
       return;
     }
-
+  
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token is missing');
       return;
     }
-
+  
+    const cleanedMessage = leoProfanity.clean(trimmedMessage);
+  
     const messageData = {
-      body: trimmedMessage,
+      body: cleanedMessage,
       channelId: activeChannelId,
       username,
     };
-
+  
     try {
       await axios.post(routes.messagesPath(), messageData, {
         headers: { Authorization: `Bearer ${token}` },

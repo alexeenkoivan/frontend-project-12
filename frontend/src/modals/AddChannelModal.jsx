@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { addChannel } from '../slices/channelsSlice.js';
 import { toast } from 'react-toastify';
+import leoProfanity from 'leo-profanity';
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation();
@@ -26,7 +27,8 @@ const AddChannelModal = ({ show, onHide }) => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        await dispatch(addChannel({ name: values.name })).unwrap();
+        const cleanedName = leoProfanity.clean(values.name);
+        await dispatch(addChannel({ name: cleanedName })).unwrap();
         toast.success(t('channels.created'));
         resetForm();
         onHide();

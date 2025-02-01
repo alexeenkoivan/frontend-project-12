@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { renameChannel } from '../slices/channelsSlice.js';
 import { toast } from 'react-toastify';
+import leoProfanity from 'leo-profanity';
 
 
 const RenameChannelModal = ({ channel, onHide }) => {
@@ -28,7 +29,8 @@ const RenameChannelModal = ({ channel, onHide }) => {
     }),
     onSubmit: async (values) => {
       try {
-        await dispatch(renameChannel({ id: channel.id, name: values.name })).unwrap();
+        const cleanedName = leoProfanity.clean(values.name);
+        await dispatch(renameChannel({ id: channel.id, name: cleanedName })).unwrap();
         toast.success(t('channels.renamed'));
         onHide();
       } catch (err) {
