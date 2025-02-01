@@ -4,8 +4,9 @@
   "description": "Hexlet Chat Project",
   "main": "index.js",
   "scripts": {
-    "start": "npx hexlet-chat-server -s ./frontend/build",
-    "build": "npm install --prefix frontend && npm run build --prefix frontend"
+    "start": "make start",
+    "build": "make build",
+    "test": "npx playwright test"
   },
   "keywords": [
     "hexlet",
@@ -16,5 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "@hexlet/chat-server": "^2.0.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.1",
+    "@types/node": "^22.13.0"
   }
 }
