@@ -3,8 +3,7 @@ build:
 	npm run build --prefix frontend
 
 start:
-	@npx start-server & \
-	sleep 5 && \
+	npx start-server & \
 	cd frontend && npm start
 
 lint:
@@ -12,6 +11,3 @@ lint:
 
 install:
 	npm ci
-
-test:
-	npx playwright test
