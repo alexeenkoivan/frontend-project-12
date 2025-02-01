@@ -9,3 +9,6 @@ start:
 
 lint:
 	npm run lint --prefix frontend
+
+install:
+	npm ci
