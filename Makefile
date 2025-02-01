@@ -9,6 +9,3 @@ start:
 
 lint:
 	npm run lint --prefix frontend
-
-test:
-	npx playwright test

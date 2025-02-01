@@ -19,7 +19,6 @@
     "@hexlet/chat-server": "^2.0.4"
   },
   "devDependencies": {
-    "@playwright/test": "^1.50.1",
     "@types/node": "^22.13.0"
   }
 }
