@@ -4,9 +4,8 @@
   "description": "Hexlet Chat Project",
   "main": "index.js",
   "scripts": {
-    "start": "make start",
-    "build": "make build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "set PORT=5000 && react-scripts start",
+    "build": "make build"
   },
   "keywords": [
     "hexlet",
@@ -19,6 +18,7 @@
     "@hexlet/chat-server": "^2.0.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.50.1",
     "@types/node": "^22.13.0"
   }
 }

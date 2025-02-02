@@ -21,15 +21,15 @@ const SignupPage = () => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(3, 'Имя пользователя должно содержать от 3 до 20 символов')
-        .max(20, 'Имя пользователя должно содержать от 3 до 20 символов')
-        .required('Обязательное поле'),
+        .min(3, t('signup.usernameConstraints'))
+        .max(20, t('signup.usernameConstraints'))
+        .required(t('signup.required')),
       password: Yup.string()
-        .min(6, 'Пароль должен содержать минимум 6 символов')
-        .required('Обязательное поле'),
+        .min(6, t('signup.passMin'))
+        .required(t('signup.required')),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
-        .required('Обязательное поле'),
+        .oneOf([Yup.ref('password'), null], t('signup.mustMatch'))
+        .required(t('signup.required')),
     }),
     onSubmit: async (values) => {
       setSignupFailed(false);

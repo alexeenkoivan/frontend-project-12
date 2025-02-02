@@ -16,7 +16,7 @@ const translations = {
         messagesCount_few: '{{count}} сообщения',
         messagesCount_many: '{{count}} сообщений',
       },
-      newMessage: 'Введите сообщение...',
+      newMessage: 'Новое сообщение',
       placeholder: 'Новое сообщение',
       sendMessage: 'Отправить',
     },

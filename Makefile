@@ -4,7 +4,7 @@ build:
 
 start:
 	npx start-server & \
-	cd frontend && npm start
+	cd frontend && PORT=5000 npm start
 
 lint:
 	npm run lint --prefix frontend
