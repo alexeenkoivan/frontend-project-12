@@ -4,20 +4,19 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Button, FormControl, FormGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import { addChannel } from '../slices/channelsSlice.js';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import routes from '../routes.js';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const channels = useSelector((state) => state.channels.channels);
+  const inputRef = useRef();
 
   const formik = useFormik({
-    initialValues: {
-      name: '',
-    },
+    initialValues: { name: '' },
     validationSchema: Yup.object({
       name: Yup.string()
         .min(3, t('modals.min'))
@@ -28,7 +27,14 @@ const AddChannelModal = ({ show, onHide }) => {
     onSubmit: async (values, { resetForm }) => {
       try {
         const cleanedName = leoProfanity.clean(values.name);
-        await dispatch(addChannel({ name: cleanedName })).unwrap();
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+    
+        await axios.post(routes.channelsPath(), 
+          { name: cleanedName, username },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+    
         toast.success(t('channels.created'));
         resetForm();
         onHide();
@@ -37,8 +43,6 @@ const AddChannelModal = ({ show, onHide }) => {
       }
     },
   });
-
-  const inputRef = useRef();
 
   useEffect(() => {
     if (show) {
@@ -54,15 +58,19 @@ const AddChannelModal = ({ show, onHide }) => {
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
           <FormGroup>
+            <label htmlFor="channelName" className="visually-hidden">{t('modals.channelName')}</label>
             <FormControl
-              ref={inputRef}
+              id="channelName"
               name="name"
               placeholder={t('modals.channelName')}
               value={formik.values.name}
               onChange={formik.handleChange}
               isInvalid={formik.touched.name && !!formik.errors.name}
+              className="mt-2"
             />
-            <FormControl.Feedback type="invalid">{formik.errors.name}</FormControl.Feedback>
+            <FormControl.Feedback type="invalid">
+              {formik.errors.name}
+            </FormControl.Feedback>
           </FormGroup>
           <div className="d-flex justify-content-end mt-3">
             <Button variant="secondary" onClick={onHide} className="me-2">

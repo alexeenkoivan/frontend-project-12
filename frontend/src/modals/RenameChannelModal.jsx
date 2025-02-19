@@ -51,10 +51,12 @@ const RenameChannelModal = ({ channel, onHide }) => {
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
           <FormGroup>
+            <label htmlFor="name" className="form-label">{t('modals.channelName')}</label>
             <FormControl
               ref={inputRef}
+              id="name"
               name="name"
-              placeholder={t('modals.editChannelName')}
+              placeholder={t('modals.channelName')}
               value={formik.values.name}
               onChange={formik.handleChange}
               isInvalid={formik.touched.name && !!formik.errors.name}

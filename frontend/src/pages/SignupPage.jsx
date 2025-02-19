@@ -38,9 +38,17 @@ const SignupPage = () => {
           username: values.username,
           password: values.password,
         });
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('username', values.username);
-        navigate('/');
+    
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('username', values.username);
+          
+          setTimeout(() => {
+            navigate('/');
+          }, 100);
+        } else {
+          console.error('No token received');
+        }
       } catch (error) {
         if (error.response?.status === 409) {
           setSignupFailed(true);

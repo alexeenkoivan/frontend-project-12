@@ -75,7 +75,7 @@ test.describe('auth', () => {
     ).toHaveCount(0);
   });
 
-  test('handle login error', async ({ page }) => { // тест провален
+  test('handle login error', async ({ page }) => {
     await page.locator('text=Ваш ник').first().type('guest');
     await page.locator('text=/^Пароль:?$/').first().type('pass');
     await page.locator('button[type="submit"]').first().click();
@@ -123,7 +123,7 @@ test.describe('chat', () => {
 
   test('adding channel', async ({ page }) => {
     await page.locator('text=+').first().click();
-    await page.locator('text=Имя канала').first().type('test channel');
+    await page.locator('text=Имя канала').first().type('test channel'); // 126 строка тест провален
     await page.keyboard.press('Enter');
 
     await expect(await page.locator('text=Канал создан')).toBeVisible();

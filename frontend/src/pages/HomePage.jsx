@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, ButtonGroup, DropdownButton } from 'react-bootstrap';
+import { Dropdown, ButtonGroup, Button } from 'react-bootstrap';
 import { fetchChannels, setActiveChannel } from '../slices/channelsSlice.js';
 import { fetchMessages, addMessage } from '../slices/messageSlice.js';
 import { useSocket } from '../contexts/SocketContext.js';
@@ -31,19 +31,33 @@ const HomePage = () => {
 
   const messages = messagesByChannelId[activeChannelId] || [];
 
-  useEffect(() => {
-    if (socket) {
-      dispatch(fetchChannels());
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem('token'));
+    };
+  
+    window.addEventListener('storage', handleStorageChange);
+  
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+  
+  useEffect(() => {
+    if (token && socket) {
+      dispatch(fetchChannels());
+  
       socket.on('newMessage', (message) => {
         dispatch(addMessage(message));
       });
-
+  
       return () => {
         socket.off('newMessage');
       };
     }
-  }, [dispatch, socket]);
+  }, [dispatch, socket, token]);
 
   useEffect(() => {
     if (activeChannelId && !messagesByChannelId[activeChannelId]) {
@@ -117,40 +131,56 @@ const HomePage = () => {
           <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
               <b>{t('channels.channels')}</b>
-              <button
-                type="button"
-                className="p-0 text-primary btn btn-group-vertical"
-                onClick={openAddChannelModal}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
-                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"></path>
-                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"></path>
-                </svg>
-              </button>
+              {channels.length > 0 && (
+                <button
+                  type="button"
+                  className="p-0 text-primary btn btn-group-vertical"
+                  aria-label={t('modals.add')}
+                  onClick={openAddChannelModal}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
+                    <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="14" fontWeight="bold">+</text>
+                  </svg>
+                </button>
+              )}
             </div>
             <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
               {channels?.map((channel) => (
-                <li key={channel.id} className="nav-item w-100 d-flex justify-content-between align-items-center">
-                  <button
+                <li key={channel.id} className="nav-item w-100">
+                {channel.removable ? (
+                  <Dropdown as={ButtonGroup} className="d-flex w-100">
+                    <Button
+                      type="button"
+                      variant={channel.id === activeChannelId ? "secondary" : "light"}
+                      className="w-100 rounded-0 text-start text-truncate"
+                      onClick={() => handleChannelClick(channel.id)}
+                    >
+                      <span className="me-1">#</span> {channel.name}
+                    </Button>
+
+                    <Dropdown.Toggle split className="flex-grow-0" variant={channel.id === activeChannelId ? "secondary" : "light"}>
+                      <span className="visually-hidden">{t('channels.menu')}</span>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>
+                        {t('channels.remove')}
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>
+                        {t('channels.rename')}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                ) : (
+                  <Button
                     type="button"
-                    className={`flex-grow-1 w-100 rounded-0 text-start btn ${channel.id === activeChannelId ? 'btn-secondary' : ''}`}
+                    variant={channel.id === activeChannelId ? "secondary" : "light"}
+                    className="w-100 rounded-0 text-start text-truncate"
                     onClick={() => handleChannelClick(channel.id)}
                   >
-                    <span className="me-1">#</span>{channel.name}
-                  </button>
-                  {channel.isNew && (
-                    <Dropdown as={ButtonGroup} align="end">
-                      <DropdownButton
-                        id={`dropdown-${channel.id}`}
-                        title=""
-                        variant="light"
-                        split
-                      >
-                        <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>{t('channels.remove')}</Dropdown.Item>
-                        <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>{t('channels.rename')}</Dropdown.Item>
-                      </DropdownButton>
-                    </Dropdown>
-                  )}
+                    <span className="me-1">#</span> {channel.name}
+                  </Button>
+                )}
                 </li>
               ))}
             </ul>
@@ -185,10 +215,8 @@ const HomePage = () => {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                     />
-                    <button type="submit" className="btn btn-group-vertical">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
-                        <path fillRule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"></path>
-                      </svg>
+                    <button type="submit" className="btn btn-outline-secondary">
+                      <i className="bi bi-box-arrow-right"></i>
                     </button>
                   </div>
                 </form>
