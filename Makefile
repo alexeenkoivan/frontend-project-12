@@ -11,6 +11,3 @@ lint:
 
 install:
 	npm ci
-
-test:
-	echo "Skipping Playwright tests in CI"
