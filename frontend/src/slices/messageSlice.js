@@ -43,7 +43,7 @@ const messagesSlice = createSlice({
     builder
       .addCase(fetchMessages.fulfilled, (state, action) => {
         const { channelId, messages } = action.payload;
-        state.byChannelId[channelId] = messages || [];
+        state.byChannelId[channelId] = Array.isArray(messages) ? messages : [];
       });
   },
 });

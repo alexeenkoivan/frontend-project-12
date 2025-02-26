@@ -29,7 +29,9 @@ const HomePage = () => {
 
   const username = localStorage.getItem('username');
 
-  const messages = messagesByChannelId[activeChannelId] || [];
+  const messages = Array.isArray(messagesByChannelId[activeChannelId])
+  ? messagesByChannelId[activeChannelId]
+  : [];
 
   const [token, setToken] = useState(localStorage.getItem('token'));
 

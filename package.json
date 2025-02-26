@@ -2,14 +2,17 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "Hexlet Chat Project",
-  "engines": {
-    "node": "18.x"
-  },
   "main": "index.js",
   "scripts": {
-    "start": "set PORT=5000 && react-scripts start",
+    "install": "npm ci",
+    "start": "make start",
+    "start-frontend": "make start-frontend",
+    "start-backend": "make start-backend",
+    "develop": "make develop",
     "build": "make build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test",
+    "lint": "make lint",
+    "postinstall": "cd frontend && npm ci"
   },
   "keywords": [
     "hexlet",
@@ -22,6 +25,7 @@
     "@hexlet/chat-server": "^2.0.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.50.1",
     "@types/node": "^22.13.0"
   }
 }
