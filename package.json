@@ -4,14 +4,14 @@
   "description": "Hexlet Chat Project",
   "main": "index.js",
   "scripts": {
-    "install": "npm ci",
-    "start": "make start",
     "start-frontend": "make start-frontend",
     "start-backend": "make start-backend",
     "develop": "make develop",
-    "build": "make build",
     "test": "make test",
-    "lint": "make lint"
+    "lint": "make lint",
+    "postinstall": "cd frontend && npm ci",
+    "start": "npx start-server -s ./frontend/build",
+    "build": "npm run build --prefix frontend"
   },
   "keywords": [
     "hexlet",
@@ -24,6 +24,7 @@
     "@hexlet/chat-server": "^2.0.4",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "glob": "^8.1.0",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
