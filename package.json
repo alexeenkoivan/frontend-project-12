@@ -27,6 +27,9 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "@hexlet/chat-server": "^2.0.4"
+    "@hexlet/chat-server": "^2.0.4",
+    "eslint": "^8.56.0",
+    "glob": "^8.1.0",
+    "rimraf": "^5.0.1"
   }
 }
