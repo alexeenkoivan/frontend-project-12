@@ -151,7 +151,7 @@ const HomePage = () => {
                 <li key={channel.id} className="nav-item w-100">
                 {channel.removable ? (
                   <Dropdown as={ButtonGroup} className="d-flex w-100">
-                     <Button
+                    <Button
                       type="button"
                       variant={channel.id === activeChannelId ? "secondary" : "light"}
                       className="w-100 rounded-0 text-start text-truncate"
@@ -160,20 +160,9 @@ const HomePage = () => {
                       <span className="me-1">#</span> {channel.name}
                     </Button>
 
-                    <Dropdown>
-                        <Dropdown.Toggle id="channel-dropdown" variant={channel.id === activeChannelId ? "secondary" : "light"} className="rounded-0">
-                            <span className="visually-hidden">{t('channels.menu')}</span>
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>
-                                {t('channels.remove')}
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>
-                                {t('channels.rename')}
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                    <Dropdown.Toggle split className="flex-grow-0" variant={channel.id === activeChannelId ? "secondary" : "light"}>
+                      <span className="visually-hidden">{t('channels.menu')}</span>
+                    </Dropdown.Toggle>
 
                     <Dropdown.Menu>
                       <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>
