@@ -60,7 +60,6 @@ const RenameChannelModal = ({ channel, onHide }) => {
               value={formik.values.name}
               onChange={formik.handleChange}
               isInvalid={formik.touched.name && !!formik.errors.name}
-              autoFocus
             />
             <FormControl.Feedback type="invalid">{formik.errors.name}</FormControl.Feedback>
           </FormGroup>

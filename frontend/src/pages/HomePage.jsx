@@ -161,7 +161,8 @@ const HomePage = () => {
                     </Button>
 
                     <Dropdown.Toggle split className="flex-grow-0" variant={channel.id === activeChannelId ? "secondary" : "light"}>
-                      <span className="visually-hidden">{t('channels.menu')}</span>
+                        <span className="visually-hidden">{t('channels.menu')}</span>
+                        <span aria-hidden="true" style={{ display: 'none' }}>{t('channels.menu')}</span>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
