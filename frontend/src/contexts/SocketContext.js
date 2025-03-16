@@ -10,7 +10,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io('/', { withCredentials: true });
+    const newSocket = io('http://localhost:5000', { withCredentials: true });
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
