@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, ButtonGroup, Button } from 'react-bootstrap';
-import { fetchChannels, setActiveChannel } from '../slices/channelsSlice.js';
+import { fetchChannels, setActiveChannel, addNewChannel } from '../slices/channelsSlice.js';
 import { fetchMessages, addMessage } from '../slices/messageSlice.js';
 import { useSocket } from '../contexts/SocketContext.js';
 import axios from 'axios';
@@ -12,7 +12,7 @@ import RenameChannelModal from '../modals/RenameChannelModal.jsx';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import leoProfanity from 'leo-profanity';
-
+import useAuth from '../hooks/useAuth';
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -28,38 +28,41 @@ const HomePage = () => {
   const [channelToRename, setChannelToRename] = useState(null);
 
   const username = localStorage.getItem('username');
+  const token = useAuth();
 
   const messages = Array.isArray(messagesByChannelId[activeChannelId])
-  ? messagesByChannelId[activeChannelId]
-  : [];
-
-  const [token, setToken] = useState(localStorage.getItem('token'));
+    ? messagesByChannelId[activeChannelId]
+    : [];
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      setToken(localStorage.getItem('token'));
-    };
-  
-    window.addEventListener('storage', handleStorageChange);
-  
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-  
-  useEffect(() => {
-    if (token && socket) {
+    if (token) {
       dispatch(fetchChannels());
-  
-      socket.on('newMessage', (message) => {
-        dispatch(addMessage(message));
-      });
-  
-      return () => {
-        socket.off('newMessage');
-      };
     }
-  }, [dispatch, socket, token]);
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewMessage = (message) => {
+      dispatch(addMessage(message));
+    };
+
+    const handleNewChannel = (channel) => {
+      dispatch(addNewChannel(channel));
+      const currentUser = localStorage.getItem('username');
+      if (channel.username === currentUser) {
+        dispatch(setActiveChannel(channel.id));
+      }
+    };
+
+    socket.on('newMessage', handleNewMessage);
+    socket.on('newChannel', handleNewChannel);
+
+    return () => {
+      socket.off('newMessage', handleNewMessage);
+      socket.off('newChannel', handleNewChannel);
+    };
+  }, [dispatch, socket]);
 
   useEffect(() => {
     if (activeChannelId && !messagesByChannelId[activeChannelId]) {
@@ -70,31 +73,30 @@ const HomePage = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    navigate('/login');
+    navigate(routes.ROUTES.LOGIN);
   };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-  
+
     const trimmedMessage = newMessage.trim();
     if (!trimmedMessage) {
       return;
     }
-  
-    const token = localStorage.getItem('token');
+
     if (!token) {
       console.error('Token is missing');
       return;
     }
-  
+
     const cleanedMessage = leoProfanity.clean(trimmedMessage);
-  
+
     const messageData = {
       body: cleanedMessage,
       channelId: activeChannelId,
       username,
     };
-  
+
     try {
       await axios.post(routes.messagesPath(), messageData, {
         headers: { Authorization: `Bearer ${token}` },
@@ -111,10 +113,8 @@ const HomePage = () => {
 
   const openAddChannelModal = () => setAddChannelModalOpen(true);
   const closeAddChannelModal = () => setAddChannelModalOpen(false);
-
   const openRemoveChannelModal = (channel) => setChannelToRemove(channel);
   const closeRemoveChannelModal = () => setChannelToRemove(null);
-
   const openRenameChannelModal = (channel) => setChannelToRename(channel);
   const closeRenameChannelModal = () => setChannelToRename(null);
 

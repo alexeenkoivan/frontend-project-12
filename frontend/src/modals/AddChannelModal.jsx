@@ -9,11 +9,13 @@ import axios from 'axios';
 import routes from '../routes.js';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
+import useAuth from '../hooks/useAuth.js';
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation();
   const channels = useSelector((state) => state.channels.channels);
   const inputRef = useRef();
+  const token = useAuth();
 
   const formik = useFormik({
     initialValues: { name: '' },
@@ -27,7 +29,6 @@ const AddChannelModal = ({ show, onHide }) => {
     onSubmit: async (values, { resetForm }) => {
       try {
         const cleanedName = leoProfanity.clean(values.name);
-        const token = localStorage.getItem('token');
         const username = localStorage.getItem('username');
     
         await axios.post(routes.channelsPath(), 

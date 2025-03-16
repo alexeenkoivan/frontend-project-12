@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import leoProfanity from 'leo-profanity';
 import initI18n from './locales/i18n.js';
 import './index.css';
-import App from './App';
+import App from './App.jsx';
 import reportWebVitals from './reportWebVitals';
 import store from './store.js';
 import { io } from 'socket.io-client';

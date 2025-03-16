@@ -44,7 +44,7 @@ const SignupPage = () => {
           localStorage.setItem('username', values.username);
           
           setTimeout(() => {
-            navigate('/');
+            navigate(routes.ROUTES.HOME);
           }, 100);
         } else {
           console.error('No token received');
