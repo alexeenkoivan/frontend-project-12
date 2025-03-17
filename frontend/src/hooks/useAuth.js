@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const useAuth = () => {
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
 
   useEffect(() => {
     const handleStorageChange = () => {
