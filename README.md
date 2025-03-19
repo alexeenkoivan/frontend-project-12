@@ -16,9 +16,10 @@ The following app is a clone of a basic slack functionality that was developed i
 
 ## Installation
 
-1. Clone the repository::
+1. Clone the repository:
 		```sh
 		git clone https://https://github.com/alexeenkoivan/frontend-project-12
+		
 		cd hexlet-chat
 
 3. Install dependencies:
