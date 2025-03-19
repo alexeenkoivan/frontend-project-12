@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import leoProfanity from 'leo-profanity';
+import { io } from 'socket.io-client';
 import initI18n from './locales/i18n.js';
 import './index.css';
 import App from './App.jsx';
 import reportWebVitals from './reportWebVitals';
 import store from './store.js';
-import { io } from 'socket.io-client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 leoProfanity.clearList();

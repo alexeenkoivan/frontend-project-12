@@ -36,7 +36,10 @@ const HomePage = () => {
     }
   }, [channels, activeChannelId]);
 
-  const { data: messagesData = [] } = useGetMessagesQuery(activeChannelId, { skip: !activeChannelId });
+  const { data: messagesData = [] } = useGetMessagesQuery(
+    activeChannelId,
+    { skip: !activeChannelId }
+  );
   const messages = Array.isArray(messagesData)
     ? messagesData.filter((msg) => msg.channelId === activeChannelId)
     : [];

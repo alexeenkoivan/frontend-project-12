@@ -1,6 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Button, FormControl, FormGroup } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  FormControl,
+  FormGroup
+} from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
