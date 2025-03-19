@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import { Modal, Button, FormControl, FormGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { renameChannel } from '../slices/channelsSlice.js';
+import { useRenameChannelMutation, useGetChannelsQuery } from '../slices/channelsSlice.js';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 
-
 const RenameChannelModal = ({ channel, onHide }) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const channels = useSelector((state) => state.channels.channels);
   const inputRef = useRef();
+
+  const { data: channels = [] } = useGetChannelsQuery();
+
+  const [renameChannel] = useRenameChannelMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -30,7 +30,7 @@ const RenameChannelModal = ({ channel, onHide }) => {
     onSubmit: async (values) => {
       try {
         const cleanedName = leoProfanity.clean(values.name);
-        await dispatch(renameChannel({ id: channel.id, name: cleanedName })).unwrap();
+        await renameChannel({ id: channel.id, name: cleanedName }).unwrap();
         toast.success(t('channels.renamed'));
         onHide();
       } catch (err) {
@@ -51,7 +51,9 @@ const RenameChannelModal = ({ channel, onHide }) => {
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
           <FormGroup>
-            <label htmlFor="name" className="form-label">{t('modals.channelName')}</label>
+            <label htmlFor="name" className="form-label">
+              {t('modals.channelName')}
+            </label>
             <FormControl
               ref={inputRef}
               id="name"
@@ -61,7 +63,9 @@ const RenameChannelModal = ({ channel, onHide }) => {
               onChange={formik.handleChange}
               isInvalid={formik.touched.name && !!formik.errors.name}
             />
-            <FormControl.Feedback type="invalid">{formik.errors.name}</FormControl.Feedback>
+            <FormControl.Feedback type="invalid">
+              {formik.errors.name}
+            </FormControl.Feedback>
           </FormGroup>
           <div className="d-flex justify-content-end mt-3">
             <Button variant="secondary" onClick={onHide} className="me-2">

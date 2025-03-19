@@ -4,18 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Button, FormControl, FormGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import routes from '../routes.js';
+import { useGetChannelsQuery, useAddChannelMutation } from '../slices/channelsSlice.js';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
-import useAuth from '../hooks/useAuth.js';
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation();
-  const channels = useSelector((state) => state.channels.channels);
+  const { data: channels = [] } = useGetChannelsQuery();
   const inputRef = useRef();
-  const token = useAuth();
+
+  const [addChannel] = useAddChannelMutation();
 
   const formik = useFormik({
     initialValues: { name: '' },
@@ -30,12 +28,7 @@ const AddChannelModal = ({ show, onHide }) => {
       try {
         const cleanedName = leoProfanity.clean(values.name);
         const username = localStorage.getItem('username');
-    
-        await axios.post(routes.channelsPath(), 
-          { name: cleanedName, username },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-    
+        await addChannel({ name: cleanedName, username }).unwrap();
         toast.success(t('channels.created'));
         resetForm();
         onHide();
@@ -59,7 +52,9 @@ const AddChannelModal = ({ show, onHide }) => {
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
           <FormGroup>
-            <label htmlFor="channelName" className="visually-hidden">{t('modals.channelName')}</label>
+            <label htmlFor="channelName" className="visually-hidden">
+              {t('modals.channelName')}
+            </label>
             <FormControl
               id="channelName"
               name="name"
@@ -68,6 +63,7 @@ const AddChannelModal = ({ show, onHide }) => {
               onChange={formik.handleChange}
               isInvalid={formik.touched.name && !!formik.errors.name}
               className="mt-2"
+              ref={inputRef}
             />
             <FormControl.Feedback type="invalid">
               {formik.errors.name}

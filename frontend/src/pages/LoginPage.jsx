@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useLoginMutation } from '../slices/authSlice.js';
 import routes from '../routes.js';
 import avatarLoginPage from '../images/avatarLoginPage.jpg';
 
@@ -11,6 +11,7 @@ const LoginPage = () => {
   const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
   const navigate = useNavigate();
+  const [login] = useLoginMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -20,8 +21,8 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       setAuthFailed(false);
       try {
-        const response = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('token', response.data.token);
+        const response = await login(values).unwrap();
+        localStorage.setItem('token', response.token);
         localStorage.setItem('username', values.username);
         navigate(routes.ROUTES.HOME);
       } catch (error) {

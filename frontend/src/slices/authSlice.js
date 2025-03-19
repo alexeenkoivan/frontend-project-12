@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import routes from '../routes.js';
 
-export const messagesApi = createApi({
-  reducerPath: 'messagesApi',
+export const authApi = createApi({
+  reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: routes.baseUrl,
     prepareHeaders: (headers) => {
@@ -14,24 +14,22 @@ export const messagesApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Messages'],
   endpoints: (builder) => ({
-    getMessages: builder.query({
-      query: () => routes.messagesPath(),
-      providesTags: [{ type: 'Messages', id: 'LIST' }],
-    }),
-    addMessage: builder.mutation({
-      query: (messageData) => ({
-        url: routes.messagesPath(),
+    login: builder.mutation({
+      query: (credentials) => ({
+        url: routes.loginPath(),
         method: 'POST',
-        body: JSON.stringify(messageData),
+        body: credentials,
       }),
-      invalidatesTags: [{ type: 'Messages', id: 'LIST' }],
+    }),
+    signup: builder.mutation({
+      query: (userData) => ({
+        url: routes.signupPath(),
+        method: 'POST',
+        body: userData,
+      }),
     }),
   }),
 });
 
-export const {
-  useGetMessagesQuery,
-  useAddMessageMutation,
-} = messagesApi;
+export const { useLoginMutation, useSignupMutation } = authApi;

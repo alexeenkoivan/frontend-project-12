@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { removeChannel } from '../slices/channelsSlice.js';
+import { useRemoveChannelMutation } from '../slices/channelsSlice.js';
 import { toast } from 'react-toastify';
 
 const RemoveChannelModal = ({ channel, onHide }) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const [removeChannel] = useRemoveChannelMutation();
 
   const handleRemove = async () => {
     try {
-      await dispatch(removeChannel(channel.id)).unwrap();
+      await removeChannel(channel.id).unwrap();
       toast.success(t('channels.removed'));
       onHide();
     } catch (err) {

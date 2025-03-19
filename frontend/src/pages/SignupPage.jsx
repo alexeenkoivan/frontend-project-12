@@ -3,15 +3,16 @@ import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import * as Yup from 'yup';
 import routes from '../routes.js';
 import avatarRegistration from '../images/avatarRegistration.jpg';
+import { useSignupMutation } from '../slices/authSlice.js';
 
 const SignupPage = () => {
   const { t } = useTranslation();
   const [signupFailed, setSignupFailed] = useState(false);
   const navigate = useNavigate();
+  const [signup] = useSignupMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -34,13 +35,13 @@ const SignupPage = () => {
     onSubmit: async (values) => {
       setSignupFailed(false);
       try {
-        const response = await axios.post(routes.signupPath(), {
+        const response = await signup({
           username: values.username,
           password: values.password,
-        });
-    
-        if (response.data.token) {
-          localStorage.setItem('token', response.data.token);
+        }).unwrap();
+
+        if (response.token) {
+          localStorage.setItem('token', response.token);
           localStorage.setItem('username', values.username);
           
           setTimeout(() => {
@@ -50,7 +51,7 @@ const SignupPage = () => {
           console.error('No token received');
         }
       } catch (error) {
-        if (error.response?.status === 409) {
+        if (error.status === 409) {
           setSignupFailed(true);
         }
       }

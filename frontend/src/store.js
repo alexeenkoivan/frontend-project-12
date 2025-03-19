@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import channelsReducer from './slices/channelsSlice.js';
-import messagesReducer from './slices/messageSlice.js';
+import { channelsApi } from './slices/channelsSlice.js';
+import { messagesApi } from './slices/messageSlice.js';
 
 const store = configureStore({
   reducer: {
-    channels: channelsReducer,
-    messages: messagesReducer,
+    [channelsApi.reducerPath]: channelsApi.reducer,
+    [messagesApi.reducerPath]: messagesApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(channelsApi.middleware)
+      .concat(messagesApi.middleware),
 });
 
 export default store;
