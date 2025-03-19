@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dropdown, ButtonGroup, Button } from 'react-bootstrap';
-import { useGetChannelsQuery, channelsApi } from '../slices/channelsSlice.js';
-import { useGetMessagesQuery, useAddMessageMutation, messagesApi } from '../slices/messageSlice.js';
-import { useSocket } from '../contexts/SocketContext.js';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import leoProfanity from 'leo-profanity';
+import { useGetChannelsQuery, channelsApi } from '../slices/channelsSlice.js';
+import { useGetMessagesQuery, useAddMessageMutation, messagesApi } from '../slices/messageSlice.js';
+import { useSocket } from '../contexts/SocketContext.js';
 import useAuth from '../hooks/useAuth';
 import routes from '../routes.js';
 import AddChannelModal from '../modals/AddChannelModal.jsx';
@@ -38,8 +38,8 @@ const HomePage = () => {
 
   const { data: messagesData = [] } = useGetMessagesQuery(activeChannelId, { skip: !activeChannelId });
   const messages = Array.isArray(messagesData)
-  ? messagesData.filter((msg) => msg.channelId === activeChannelId)
-  : [];
+    ? messagesData.filter((msg) => msg.channelId === activeChannelId)
+    : [];
 
   const [sendMessage] = useAddMessageMutation();
 
@@ -53,7 +53,7 @@ const HomePage = () => {
         dispatch(
           messagesApi.util.updateQueryData('getMessages', activeChannelId, (draft) => {
             draft.push(message);
-          })
+          }),
         );
       }
     };
@@ -62,7 +62,7 @@ const HomePage = () => {
       dispatch(
         channelsApi.util.updateQueryData('getChannels', undefined, (draft) => {
           draft.push(channel);
-        })
+        }),
       );
       if (channel.username === username) {
         setActiveChannelId(channel.id);
@@ -86,24 +86,24 @@ const HomePage = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-  
+
     const trimmedMessage = newMessage.trim();
     if (!trimmedMessage) {
       return;
     }
-  
+
     if (!token) {
       console.error('Token is missing');
       return;
     }
-  
+
     const cleanedMessage = leoProfanity.clean(trimmedMessage);
     const messageData = {
       body: cleanedMessage,
       username,
       channelId: activeChannelId,
     };
-  
+
     try {
       console.log('Отправка сообщения:', messageData);
       await sendMessage(messageData).unwrap();
@@ -112,7 +112,7 @@ const HomePage = () => {
       console.error('Failed to send message', error);
     }
   };
-  
+
 
   const handleChannelClick = (channelId) => {
     setActiveChannelId(channelId);
@@ -167,13 +167,13 @@ const HomePage = () => {
                     <Dropdown as={ButtonGroup} className="d-flex w-100">
                       <Button
                         type="button"
-                        variant={channel.id === activeChannelId ? "secondary" : "light"}
+                        variant={channel.id === activeChannelId ? 'secondary' : 'light'}
                         className="w-100 rounded-0 text-start text-truncate"
                         onClick={() => handleChannelClick(channel.id)}
                       >
                         <span className="me-1">#</span> {channel.name}
                       </Button>
-                      <Dropdown.Toggle split className="flex-grow-0" variant={channel.id === activeChannelId ? "secondary" : "light"}>
+                      <Dropdown.Toggle split className="flex-grow-0" variant={channel.id === activeChannelId ? 'secondary' : 'light'}>
                         <span className="visually-hidden">{t('channels.menu')}</span>
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
@@ -188,7 +188,7 @@ const HomePage = () => {
                   ) : (
                     <Button
                       type="button"
-                      variant={channel.id === activeChannelId ? "secondary" : "light"}
+                      variant={channel.id === activeChannelId ? 'secondary' : 'light'}
                       className="w-100 rounded-0 text-start text-truncate"
                       onClick={() => handleChannelClick(channel.id)}
                     >

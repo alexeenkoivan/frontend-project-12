@@ -43,7 +43,7 @@ const SignupPage = () => {
         if (response.token) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('username', values.username);
-          
+
           setTimeout(() => {
             navigate(routes.ROUTES.HOME);
           }, 100);

@@ -12,7 +12,7 @@ const routes = {
     LOGIN: '/login',
     SIGNUP: '/signup',
     NOT_FOUND: '*',
-  }
+  },
 };
 
 export default routes;

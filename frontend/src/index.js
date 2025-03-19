@@ -22,7 +22,7 @@ initI18n().then(() => {
       <Provider store={store}>
         <App socket={socket} />
       </Provider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 });
 

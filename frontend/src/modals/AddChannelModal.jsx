@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Modal, Button, FormControl, FormGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useGetChannelsQuery, useAddChannelMutation } from '../slices/channelsSlice.js';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
+import { useGetChannelsQuery, useAddChannelMutation } from '../slices/channelsSlice.js';
 
 const AddChannelModal = ({ show, onHide }) => {
   const { t } = useTranslation();

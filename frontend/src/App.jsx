@@ -12,12 +12,12 @@ import { SocketProvider } from './contexts/SocketContext.js';
 import useAuth from './hooks/useAuth.js';
 import routes from './routes';
 
-const PrivateRoute = ({ children }) => { 
+const PrivateRoute = ({ children }) => {
   const token = useAuth();
   return token ? children : <Navigate to="/login" />;
 };
 
-const App = () => ( 
+const App = () => (
   <Provider instance={rollbarInstance}>
     <ErrorBoundary>
       <SocketProvider>
@@ -28,7 +28,7 @@ const App = () => (
             <Route path={routes.ROUTES.SIGNUP} element={<SignupPage />} />
             <Route path={routes.ROUTES.NOT_FOUND} element={<NotFoundPage />} />
           </Routes>
-          <ToastContainer 
+          <ToastContainer
             position="top-right"
             autoClose={5000}
             hideProgressBar={false}
