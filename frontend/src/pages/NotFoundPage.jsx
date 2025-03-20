@@ -8,7 +8,8 @@ const NotFoundPage = () => {
     <div>
       <h1>{t('notFound.header')}</h1>
       <p>
-        {t('notFound.message')} <a href={routes.ROUTES.HOME}>{t('notFound.linkText')}</a>
+        {t('notFound.message')} <a href={routes.ROUTES.HOME}>{t('notFound.linkText')}
+        </a>
       </p>
     </div>
   );
