@@ -75,7 +75,7 @@ const HomePage = () => {
     socket.on('newMessage', handleNewMessage);
     socket.on('newChannel', handleNewChannel);
 
-    return () => {
+    () => {
       socket.off('newMessage', handleNewMessage);
       socket.off('newChannel', handleNewChannel);
     };
@@ -115,7 +115,6 @@ const HomePage = () => {
       console.error('Failed to send message', error);
     }
   };
-
 
   const handleChannelClick = (channelId) => {
     setActiveChannelId(channelId);
@@ -174,7 +173,8 @@ const HomePage = () => {
                         className="w-100 rounded-0 text-start text-truncate"
                         onClick={() => handleChannelClick(channel.id)}
                       >
-                        <span className="me-1">#</span> {channel.name}
+                        <span className="me-1">#</span>
+                        {channel.name}
                       </Button>
                       <Dropdown.Toggle split className="flex-grow-0" variant={channel.id === activeChannelId ? 'secondary' : 'light'}>
                         <span className="visually-hidden">{t('channels.menu')}</span>
@@ -195,7 +195,8 @@ const HomePage = () => {
                       className="w-100 rounded-0 text-start text-truncate"
                       onClick={() => handleChannelClick(channel.id)}
                     >
-                      <span className="me-1">#</span> {channel.name}
+                      <span className="me-1">#</span>
+                      {channel.name}
                     </Button>
                   )}
                 </li>
@@ -206,7 +207,10 @@ const HomePage = () => {
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <p className="m-0">
-                  <b># {channels.find((c) => c.id === activeChannelId)?.name}</b>
+                  <b>
+                    #
+                    {channels.find((c) => c.id === activeChannelId)?.name}
+                  </b>
                 </p>
                 <span className="text-muted">
                   {t('messages.messagesCounter.messagesCount', { count: messages.length })}
