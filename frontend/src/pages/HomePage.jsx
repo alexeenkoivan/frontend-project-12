@@ -219,7 +219,7 @@ const HomePage = () => {
               <div id="messages-box" className="chat-messages overflow-auto px-5">
                 <ul className="list-unstyled">
                   {messages.map((msg, index) => (
-                    <li key={index}>
+                    <li key={msg.id}>
                       <strong>
                         {msg.username}
                         :
