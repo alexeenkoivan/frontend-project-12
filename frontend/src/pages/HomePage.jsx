@@ -220,7 +220,11 @@ const HomePage = () => {
                 <ul className="list-unstyled">
                   {messages.map((msg, index) => (
                     <li key={index}>
-                      <strong>{msg.username}: </strong>{msg.body}
+                      <strong>
+                        {msg.username}
+                        :
+                      </strong>
+                        {msg.body}
                     </li>
                   ))}
                 </ul>
