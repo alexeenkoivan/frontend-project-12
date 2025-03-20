@@ -86,7 +86,10 @@ const SignupPage = () => {
                       name="username"
                       type="text"
                       placeholder={t('signup.username')}
-                      isInvalid={signupFailed || (formik.touched.username && !!formik.errors.username)}
+                      isInvalid={
+                        signupFailed
+                        || (formik.touched.username && !!formik.errors.username)
+                      }
                       onChange={formik.handleChange}
                       value={formik.values.username}
                     />
