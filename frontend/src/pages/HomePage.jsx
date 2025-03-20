@@ -78,6 +78,7 @@ const HomePage = () => {
     return () => {
       socket.off('newMessage', handleNewMessage);
       socket.off('newChannel', handleNewChannel);
+      return undefined;
     };
   }, [socket, activeChannelId, dispatch, username]);
 
