@@ -75,7 +75,7 @@ const HomePage = () => {
     socket.on('newMessage', handleNewMessage);
     socket.on('newChannel', handleNewChannel);
 
-    () => {
+    return () => {
       socket.off('newMessage', handleNewMessage);
       socket.off('newChannel', handleNewChannel);
     };
@@ -224,7 +224,7 @@ const HomePage = () => {
                         {msg.username}
                         :
                       </strong>
-                        {msg.body}
+                      {msg.body}
                     </li>
                   ))}
                 </ul>
@@ -240,8 +240,12 @@ const HomePage = () => {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                     />
-                    <button type="submit" className="btn btn-outline-secondary">
-                      <i className="bi bi-box-arrow-right"></i>
+                    <button
+                      type="submit"
+                      className="btn btn-outline-secondary"
+                      aria-label="Submit"
+                    >
+                      <i className="bi bi-box-arrow-right" />
                     </button>
                   </div>
                 </form>
