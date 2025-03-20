@@ -4,7 +4,7 @@ import {
   Modal,
   Button,
   FormControl,
-  FormGroup
+  FormGroup,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';

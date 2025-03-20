@@ -2,7 +2,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
-  useState
+  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import { io } from 'socket.io-client';
