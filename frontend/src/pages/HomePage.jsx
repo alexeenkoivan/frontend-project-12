@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dropdown, ButtonGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -45,31 +45,32 @@ const HomePage = () => {
     : [];
 
   const [sendMessage] = useAddMessageMutation();
+
   const [newMessage, setNewMessage] = useState('');
-
-  const handleNewMessage = useCallback((message) => {
-    if (message.channelId === activeChannelId) {
-      dispatch(
-        messagesApi.util.updateQueryData('getMessages', activeChannelId, (draft) => {
-          draft.push(message);
-        }),
-      );
-    }
-  }, [activeChannelId, dispatch]);
-
-  const handleNewChannel = useCallback((channel) => {
-    dispatch(
-      channelsApi.util.updateQueryData('getChannels', undefined, (draft) => {
-        draft.push(channel);
-      }),
-    );
-    if (channel.username === username) {
-      setActiveChannelId(channel.id);
-    }
-  }, [dispatch, username]);
 
   useEffect(() => {
     if (!socket) return;
+
+    const handleNewMessage = (message) => {
+      if (message.channelId === activeChannelId) {
+        dispatch(
+          messagesApi.util.updateQueryData('getMessages', activeChannelId, (draft) => {
+            draft.push(message);
+          }),
+        );
+      }
+    };
+
+    const handleNewChannel = (channel) => {
+      dispatch(
+        channelsApi.util.updateQueryData('getChannels', undefined, (draft) => {
+          draft.push(channel);
+        }),
+      );
+      if (channel.username === username) {
+        setActiveChannelId(channel.id);
+      }
+    };
 
     socket.on('newMessage', handleNewMessage);
     socket.on('newChannel', handleNewChannel);
