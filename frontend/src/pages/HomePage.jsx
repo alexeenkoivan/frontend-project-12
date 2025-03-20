@@ -72,15 +72,15 @@ const HomePage = () => {
       }
     };
 
-    socket.on('newMessage', handleNewMessage);
-    socket.on('newChannel', handleNewChannel);
-
-    const cleanup = () => {
+    function cleanup() {
       socket.off('newMessage', handleNewMessage);
       socket.off('newChannel', handleNewChannel);
-    };
+    }
   
-    cleanup();
+    socket.on('newMessage', handleNewMessage);
+    socket.on('newChannel', handleNewChannel);
+  
+    return cleanup;
   }, [socket, activeChannelId, dispatch, username]);
 
   const handleLogout = () => {
